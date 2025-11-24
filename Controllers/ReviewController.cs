@@ -9,9 +9,9 @@ namespace Bookify.Controllers
     [Route("api/[controller]")]
     public class ReviewsController : ControllerBase
     {
-        private readonly AppDBContext _context;
+        private readonly ApplicationDb _context;
 
-        public ReviewsController(AppDBContext context)
+        public ReviewsController(ApplicationDb context)
         {
             _context = context;
         }

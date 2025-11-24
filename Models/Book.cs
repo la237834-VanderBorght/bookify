@@ -30,7 +30,8 @@ namespace Bookify.Models
         public int GenderId { get; set; }
         [JsonIgnore]
         public Gender Gender { get; set; }
+
         [JsonIgnore]
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

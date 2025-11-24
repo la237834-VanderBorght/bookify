@@ -1,15 +1,15 @@
-using Bookify.Data;
 using Bookify.Models;
+using Bookify.Data;
 using Bookify.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- Database ---
+// --- Base de données (SQL Server LocalDB intégré à Visual Studio) ---
 var cs = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDBContext>(opt =>
-    opt.UseMySql(cs, ServerVersion.AutoDetect(cs)));
+builder.Services.AddDbContext<ApplicationDb>(options =>
+    options.UseSqlServer(cs));
 
 // --- MVC Controllers + Views ---
 builder.Services.AddControllersWithViews();
@@ -35,7 +35,20 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowAngular");
 
 // --- Pipeline ---
 if (!app.Environment.IsDevelopment())
@@ -44,24 +57,31 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-// --- Swagger (accessible dans tous les environnements) ---
+// --- Swagger ---
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bookify API v1");
-    c.RoutePrefix = ""; // Swagger directement sur la racine http://localhost:5211/
+    c.RoutePrefix = ""; // Swagger sur http://localhost:xxxx/
 });
 
 // --- Middleware ---
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-// -- Routing & Authorization ---
+// --- Routing & Authorization ---
 app.UseRouting();
 app.UseAuthorization();
-app.MapControllers();
 
-// Route par défaut MVC (Controllers + Views)
-app.MapDefaultControllerRoute();
+app.MapControllers();             // API Controllers
+app.MapDefaultControllerRoute();  // MVC Views
+
+// --- Initialisation de la base avec des données de test ---
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDb>();
+    context.Database.EnsureCreated();
+    DbInitializer.Seed(context);
+}
 
 app.Run();

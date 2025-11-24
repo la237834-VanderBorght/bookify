@@ -9,9 +9,9 @@ namespace Bookify.Controllers
     [ApiController]
     public class LivreLuController : ControllerBase
     {
-        private readonly AppDBContext _context;
+        private readonly ApplicationDb _context;
 
-        public LivreLuController(AppDBContext context)
+        public LivreLuController(ApplicationDb context)
         {
             _context = context;
         }

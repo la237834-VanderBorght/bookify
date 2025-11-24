@@ -14,8 +14,8 @@ namespace Bookify.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly AppDBContext _context;
-        public BookController(AppDBContext context)
+        private readonly ApplicationDb _context;
+        public BookController(ApplicationDb context)
         {
             _context = context;
         }

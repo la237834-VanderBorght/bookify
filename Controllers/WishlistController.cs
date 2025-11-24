@@ -9,9 +9,9 @@ namespace Bookify.Controllers
     [ApiController]
     public class WishlistController : ControllerBase
     {
-        private readonly AppDBContext _context;
+        private readonly ApplicationDb _context;
 
-        public WishlistController(AppDBContext context)
+        public WishlistController(ApplicationDb context)
         {
             _context = context;
         }

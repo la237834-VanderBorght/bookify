@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BCrypt.Net;
+using Bookify.Data;
+using Bookify.Models;
+using Bookify.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Bookify.Models;
-using Microsoft.AspNetCore.Authentication;
-using Bookify.Services;
-using BCrypt.Net;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using Bookify.Data;
+using System.Threading.Tasks;
 
 namespace Bookify.Controllers
 {
@@ -18,9 +19,9 @@ namespace Bookify.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly AppDBContext _context;
+        private readonly ApplicationDb _context;
         private readonly AuthorizationService _authService;
-        public UsersController(AppDBContext context, AuthorizationService authService)
+        public UsersController(ApplicationDb context, AuthorizationService authService)
         {
             _context = context;
             _authService = authService;
@@ -110,20 +111,35 @@ namespace Bookify.Controllers
             return NoContent();
         }
 
-        [HttpPost("/login")]
-        public async Task<ActionResult<User>> Login([FromForm] string username, [FromForm] string password)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
-            var userExists = UserExists(username, password);
-            if (userExists == null)
+            if (request == null || string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
+                return BadRequest(new { message = "Nom d'utilisateur et mot de passe requis." });
+
+            var user = _context.Users.FirstOrDefault(u => u.Username == request.Username);
+            if (user == null)
+                return Unauthorized(new { message = "Nom d'utilisateur ou mot de passe invalide." });
+
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
+            if (!isPasswordValid)
+                return Unauthorized(new { message = "Nom d'utilisateur ou mot de passe invalide." });
+
+            var token = _authService.CreateToken(user);
+
+            return Ok(new
             {
-                return BadRequest();
-            }
-            else
-            {
-                var token = _authService.CreateToken(userExists);
-                return Ok(token);
-            }
+                token,
+                user = new
+                {
+                    id = user.Id,
+                    username = user.Username,
+                    email = user.Email,
+                    name = user.Name
+                }
+            });
         }
+
 
         private bool UserExists(int id)
         {
