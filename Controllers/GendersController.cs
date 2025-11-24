@@ -14,9 +14,9 @@ namespace Bookify.Controllers
     [ApiController]
     public class GendersController : ControllerBase
     {
-        private readonly AppDBContext _context;
+        private readonly ApplicationDb _context;
 
-        public GendersController(AppDBContext context)
+        public GendersController(ApplicationDb context)
         {
             _context = context;
         }

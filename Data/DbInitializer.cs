@@ -105,13 +105,13 @@ namespace Bookify.Data
             // --- LIVRES LUS ---
             var livreLusToAdd = new List<LivreLu>
             {
-                new LivreLu { BookId = petitPrince.Id, DateLu = DateTime.Now.AddDays(-10) },
-                new LivreLu { BookId = book1984.Id, DateLu = DateTime.Now.AddDays(-20) }
+                new LivreLu { BookId = petitPrince.Id, UserId = alice.Id, DateLu = DateTime.Now.AddDays(-10) },
+                new LivreLu { BookId = book1984.Id, UserId = bob.Id, DateLu = DateTime.Now.AddDays(-20) }
             };
 
             foreach (var lu in livreLusToAdd)
             {
-                if (!context.LivreLu.Any(l => l.BookId == lu.BookId))
+                if (!context.LivreLu.Any(l => l.BookId == lu.BookId && l.UserId == lu.UserId))
                 {
                     context.LivreLu.Add(lu);
                 }
