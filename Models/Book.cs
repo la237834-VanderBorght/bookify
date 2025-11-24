@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Bookify.Models
 {
@@ -27,8 +28,9 @@ namespace Bookify.Models
         // Foreign key for Gender
         [ForeignKey("Gender")]
         public int GenderId { get; set; }
-        // Navigation
+        [JsonIgnore]
         public Gender Gender { get; set; }
+        [JsonIgnore]
         public ICollection<Review> Reviews { get; set; }
     }
 }
