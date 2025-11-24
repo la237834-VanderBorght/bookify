@@ -28,7 +28,7 @@ namespace Bookify.Models
         // Foreign key for Gender
         [ForeignKey("Gender")]
         public int GenderId { get; set; }
-        // Navigation
+        [JsonIgnore]
         public Gender Gender { get; set; }
 
         [JsonIgnore]

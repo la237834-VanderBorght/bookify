@@ -42,6 +42,23 @@ namespace Bookify.Controllers
             return Ok(review);
         }
 
+        // GET: api/Reviews/ByBook/5
+        [HttpGet("ByBook/{bookId}")]
+        public async Task<ActionResult<IEnumerable<Review>>> GetReviewsByBook(int bookId)
+        {
+            var reviews = await _context.Reviews
+                .Where(r => r.BookId == bookId)
+                .Include(r => r.Book)
+                .Include(r => r.User)
+                .ToListAsync();
+
+            if (reviews == null || !reviews.Any())
+                return NotFound();
+
+            return Ok(reviews);
+        }
+
+
         // POST: api/Reviews
         [HttpPost]
         public async Task<ActionResult<Review>> CreateReview([FromBody] Review review)
