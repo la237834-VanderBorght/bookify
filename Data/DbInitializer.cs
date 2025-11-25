@@ -89,13 +89,13 @@ namespace Bookify.Data
             // --- WISHLIST ---
             var wishlistsToAdd = new List<Wishlist>
             {
-                new Wishlist { BookId = book1984.Id, DateAdded = DateTime.Now.AddDays(-2) },
-                new Wishlist { BookId = petitPrince.Id, DateAdded = DateTime.Now.AddDays(-5) }
+                new Wishlist { BookId = book1984.Id, UserId = alice.Id, DateAdded = DateTime.UtcNow.AddDays(-2) },
+                new Wishlist { BookId = petitPrince.Id, UserId = bob.Id, DateAdded = DateTime.UtcNow.AddDays(-5) }
             };
 
             foreach (var wish in wishlistsToAdd)
             {
-                if (!context.Wishlist.Any(w => w.BookId == wish.BookId))
+                if (!context.Wishlist.Any(w => w.BookId == wish.BookId && w.UserId == wish.UserId))
                 {
                     context.Wishlist.Add(wish);
                 }
