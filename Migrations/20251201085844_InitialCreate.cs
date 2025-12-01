@@ -72,6 +72,7 @@ namespace Bookify.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     DateLu = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -81,6 +82,12 @@ namespace Bookify.Migrations
                         name: "FK_LivreLu_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LivreLu_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -121,7 +128,8 @@ namespace Bookify.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookId = table.Column<int>(type: "int", nullable: false),
-                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -130,6 +138,12 @@ namespace Bookify.Migrations
                         name: "FK_Wishlist_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Wishlist_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -145,6 +159,11 @@ namespace Bookify.Migrations
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LivreLu_UserId",
+                table: "LivreLu",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reviews_BookId",
                 table: "Reviews",
                 column: "BookId");
@@ -158,6 +177,11 @@ namespace Bookify.Migrations
                 name: "IX_Wishlist_BookId",
                 table: "Wishlist",
                 column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Wishlist_UserId",
+                table: "Wishlist",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -173,10 +197,10 @@ namespace Bookify.Migrations
                 name: "Wishlist");
 
             migrationBuilder.DropTable(
-                name: "users");
+                name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "users");
 
             migrationBuilder.DropTable(
                 name: "Genders");

@@ -14,7 +14,11 @@ namespace Bookify.Data
                 {
                     new Gender { Name = "Roman" },
                     new Gender { Name = "Science-Fiction" },
-                    new Gender { Name = "Policier" }
+                    new Gender { Name = "Policier" },
+                    new Gender { Name = "Fantasy" },
+                    new Gender { Name = "Horreur" },
+                    new Gender { Name = "Historique" },
+                    new Gender { Name = "Thriller" }
                 };
                 context.Genders.AddRange(genres);
                 context.SaveChanges();
@@ -25,7 +29,16 @@ namespace Bookify.Data
             {
                 new Book { Title = "1984", Author = "George Orwell", ISBN = "9780451524935", Price = 15, Description = "Dystopie célèbre", Publisher = "Secker & Warburg", GenderId = context.Genders.First(g => g.Name == "Science-Fiction").Id },
                 new Book { Title = "Le Petit Prince", Author = "Antoine de Saint-Exupéry", ISBN = "9780156013987", Price = 10, Description = "Conte poétique", Publisher = "Gallimard", GenderId = context.Genders.First(g => g.Name == "Roman").Id },
-                new Book { Title = "Sherlock Holmes", Author = "Arthur Conan Doyle", ISBN = "9780241952894", Price  = 12, Description = "Enquêtes policières", Publisher = "Penguin", GenderId = context.Genders.First(g => g.Name == "Policier").Id }
+                new Book { Title = "Sherlock Holmes", Author = "Arthur Conan Doyle", ISBN = "9780241952894", Price  = 12, Description = "Enquêtes policières", Publisher = "Penguin", GenderId = context.Genders.First(g => g.Name == "Policier").Id },
+                new Book { Title = "Le Seigneur des Anneaux", Author = "J.R.R. Tolkien", ISBN = "9780261102385", Price = 25, Description = "Épopée fantasy", Publisher = "HarperCollins", GenderId = context.Genders.First(g => g.Name == "Fantasy").Id },
+                new Book { Title = "Dune", Author = "Frank Herbert", ISBN = "9780441013593", Price = 18, Description = "Chef-d'œuvre SF", Publisher = "Ace Books", GenderId = context.Genders.First(g => g.Name == "Science-Fiction").Id },
+                new Book { Title = "It", Author = "Stephen King", ISBN = "9781501142970", Price = 22, Description = "Horreur psychologique", Publisher = "Scribner", GenderId = context.Genders.First(g => g.Name == "Horreur").Id },
+                new Book { Title = "La Horde du Contrevent", Author = "Alain Damasio", ISBN = "9782070464020", Price = 16, Description = "Roman SF/Fantasy culte", Publisher = "La Volte", GenderId = context.Genders.First(g => g.Name == "Fantasy").Id },
+                new Book { Title = "Les Misérables", Author = "Victor Hugo", ISBN = "9782070409229", Price = 14, Description = "Classique historique", Publisher = "Gallimard", GenderId = context.Genders.First(g => g.Name == "Historique").Id },
+                new Book { Title = "Da Vinci Code", Author = "Dan Brown", ISBN = "9780307474278", Price = 13, Description = "Thriller mondialement connu", Publisher = "Doubleday", GenderId = context.Genders.First(g => g.Name == "Thriller").Id },
+                new Book { Title = "Harry Potter à l'école des sorciers", Author = "J.K. Rowling", ISBN = "9780747532699", Price = 20, Description = "Début de la célèbre saga", Publisher = "Bloomsbury", GenderId = context.Genders.First(g => g.Name == "Fantasy").Id },
+                new Book { Title = "Dracula", Author = "Bram Stoker", ISBN = "9780141439846", Price = 11, Description = "Roman fondateur du mythe vampire", Publisher = "Penguin", GenderId = context.Genders.First(g => g.Name == "Horreur").Id },
+                new Book { Title = "Fahrenheit 451", Author = "Ray Bradbury", ISBN = "9781451673319", Price = 12, Description = "Dystopie SF", Publisher = "Simon & Schuster", GenderId = context.Genders.First(g => g.Name == "Science-Fiction").Id }
             };
 
             foreach (var book in booksToAdd)
@@ -44,15 +57,22 @@ namespace Bookify.Data
                 {
                     Name = "Alice Dupont",
                     Email = "alice@test.com",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("123"), // hashé
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("123"),
                     Username = "alice"
                 },
                 new User
                 {
                     Name = "Bob Martin",
                     Email = "bob@test.com",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("456"), // hashé
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("456"),
                     Username = "bob"
+                },
+                new User
+                {
+                    Name = "Administrateur",
+                    Email = "admin@test.com",
+                    Username = "admin",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin")
                 }
             };
 
