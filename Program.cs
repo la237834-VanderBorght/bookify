@@ -20,7 +20,7 @@ builder.Services.AddHttpClient<OpenLibraryService>(c =>
     c.Timeout = TimeSpan.FromSeconds(5);
     c.DefaultRequestHeaders.UserAgent.ParseAdd("Bookify/1.0");
 });
-builder.Services.AddSingleton(new AmazonLinkBuilder(defaultMarket: "com", affiliateTag: null));
+builder.Services.AddSingleton(new AmazonLinkBuilder(defaultMarket: "fr", affiliateTag: null));
 builder.Services.AddScoped<AuthorizationService>();
 
 // --- Swagger ---
